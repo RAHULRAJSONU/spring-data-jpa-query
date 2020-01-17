@@ -1,14 +1,16 @@
 package com.silvertech.springdatajpaquery.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.silvertech.springdatajpaquery.business.EmployeeService;
-import com.silvertech.springdatajpaquery.data.model.EmployeeEntity;
-import io.swagger.annotations.Api;
+import com.silvertech.springdatajpaquery.business.impl.EmployeeLuceneSearchService;
+import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.model.EmployeeCreateRequest;
+import com.silvertech.springdatajpaquery.util.DTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,11 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
-/*
+/**
  * spring-data-jpa-query
  * MIT License
  *
@@ -52,6 +57,8 @@ public class EmployeeController {
 
   @Autowired
   private EmployeeService employeeService;
+  @Autowired
+  private EmployeeLuceneSearchService employeeSearchService;
 
   @GetMapping("/activeUsers/{method}")
   public ResponseEntity<List<EmployeeEntity>> activeUsers(@PathVariable String method){
@@ -80,5 +87,18 @@ public class EmployeeController {
       @ApiParam(value = "Provide the field name on which you want to sort the result.\n you can provide sorting order after sort separated by comma ex: id,ASC|DESC") @RequestParam String sort){
     Page<EmployeeEntity> employees = employeeService.findAllEmployeeWithPagination(pageable);
     return new ResponseEntity<>(employees, HttpStatus.ACCEPTED);
+  }
+
+  @PostMapping("/addEmployee")
+  public ResponseEntity<Boolean> addEmployee(@RequestBody EmployeeCreateRequest employeeCreateRequest){
+    ModelMapper mm = new ModelMapper();
+    EmployeeEntity ee= mm.map(employeeCreateRequest, EmployeeEntity.class);
+    employeeService.addNew(ee);
+    return new ResponseEntity<>(Boolean.TRUE,HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<EmployeeEntity>> search(@RequestParam String searchStr){
+    return new ResponseEntity<>(employeeSearchService.search(searchStr),HttpStatus.ACCEPTED);
   }
 }

@@ -1,6 +1,6 @@
 package com.silvertech.springdatajpaquery.persistence;
 
-import com.silvertech.springdatajpaquery.data.model.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -49,11 +49,11 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>,
       nativeQuery = true)
   EmployeeEntity findEmployeeByFirstNameWithNativeQuery(String firstName);
 
-  @Query("select e from EmployeeEntity e where e.firstName= : firstName and e.status= :status")
+  @Query("select e from EmployeeEntity e where e.firstName= :firstName and e.status= :status")
   EmployeeEntity findEmployeeByFirstNameAndStatus(@Param("firstName") String firstName, @Param("status") Integer status);
 
   @Query(
-      value = "select e from employee e where e.first_name= : firstName and e.status= :status",
+      value = "select e from employee e where e.first_name= :firstName and e.status= :status",
       nativeQuery = true)
   EmployeeEntity findEmployeeByFirstNameAndStatusWithNativeQuery(
       @Param("firstName") String firstName,
@@ -68,7 +68,7 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>,
   List<EmployeeEntity> findEmployeeInRangeWithNativeQuery(@Param("fnames") Collection<String> firstName);
 
   @Modifying
-  @Query("update EmployeeEntity e set e.status= :status where e.firstName= :first_name")
+  @Query("update EmployeeEntity e set e.status= :status where e.firstName= :firstName")
   int updateEmployeeStatusForName(@Param("firstName") String firstName, @Param("status") Integer status);
 
   @Modifying

@@ -1,6 +1,6 @@
 package com.silvertech.springdatajpaquery.persistence.impl;
 
-import com.silvertech.springdatajpaquery.data.model.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
 import com.silvertech.springdatajpaquery.persistence.EmployeeRepositoryCustom;
 import java.util.ArrayList;
 import java.util.List;

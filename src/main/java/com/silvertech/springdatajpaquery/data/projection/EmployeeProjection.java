@@ -1,19 +1,10 @@
-package com.silvertech.springdatajpaquery.data.model;
-
-import java.io.Serializable;
-import java.util.UUID;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.silvertech.springdatajpaquery.data.projection;
 
 /*
  * spring-data-jpa-query
  * MIT License
  *
- * Copyright (c) 2019 Rahul Raj
+ * Copyright (c) 2020 Rahul Raj
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,18 +24,10 @@ import lombok.NoArgsConstructor;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Entity
-@Table(name = "employee")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class EmployeeEntity implements Serializable {
-  @Id
-  private Long id;
-  private String firstName;
-  private String lastName;
-  private String email;
-  private String gender;
-  private String ipAddress;
-  private Boolean status;
+public interface EmployeeProjection {
+  String getFirstName();
+  String getLastName();
+  String getEmail();
+  String getGender();
+  Boolean getStatus();
 }

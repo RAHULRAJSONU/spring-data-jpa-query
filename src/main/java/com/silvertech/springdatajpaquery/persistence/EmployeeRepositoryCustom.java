@@ -1,6 +1,6 @@
 package com.silvertech.springdatajpaquery.persistence;
 
-import com.silvertech.springdatajpaquery.data.model.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
 import java.util.List;
 import java.util.Set;
 

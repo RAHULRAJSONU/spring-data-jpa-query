@@ -1,20 +1,20 @@
 package com.silvertech.springdatajpaquery.business.impl;
 
-import com.silvertech.springdatajpaquery.business.EmployeeService;
+import com.silvertech.springdatajpaquery.business.LuceneSearchService;
 import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
-import com.silvertech.springdatajpaquery.persistence.EmployeeRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
 
 /*
  * spring-data-jpa-query
  * MIT License
  *
- * Copyright (c) 2019 Rahul Raj
+ * Copyright (c) 2020 Rahul Raj
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,39 +35,36 @@ import org.springframework.stereotype.Service;
  * SOFTWARE.
  */
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeLuceneSearchService implements LuceneSearchService<EmployeeEntity> {
 
-  @Autowired
-  private EmployeeRepository employeeRepository;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Override
-  public List<EmployeeEntity> findAllActiveEmployeesUsingQuery() {
-    return employeeRepository.findAllActiveEmployeesUsingQuery();
+  public FullTextEntityManager fullTextEntityManager() {
+    return Search.getFullTextEntityManager(entityManager);
   }
 
   @Override
-  public List<EmployeeEntity> findAllActiveEmployeesUsingNativeQuery() {
-    return employeeRepository.findAllActiveEmployeesUsingNativeQuery();
+  public QueryBuilder getQueryBuilder() {
+    org.hibernate.search.query.dsl.QueryBuilder queryBuilder;
+    queryBuilder = this.fullTextEntityManager().getSearchFactory()
+        .buildQueryBuilder()
+        .forEntity(EmployeeEntity.class)
+        .get();
+    return queryBuilder;
   }
 
   @Override
-  public List<EmployeeEntity> findAllSorted(Sort sort) {
-    return employeeRepository.findAll(sort);
+  public List<EmployeeEntity> search(String str) {
+    org.apache.lucene.search.Query query;
+    query = this.getQueryBuilder()
+        .keyword()
+        .wildcard()
+        .onFields("firstName","lastName","email","gender","ipAddress","status")
+        .matching(str)
+        .createQuery();
+    return this.fullTextEntityManager().createFullTextQuery(query, EmployeeEntity.class)
+        .getResultList();
   }
-
-  @Override
-  public Page<EmployeeEntity> findAllEmployeeWithPagination(Pageable pageable) {
-    return employeeRepository.findAllEmployeeWithPagination(pageable);
-  }
-
-  @Override
-  public Page<EmployeeEntity> findAllEmployeeWithPaginationByNativeQuery(Pageable pageable) {
-    return employeeRepository.findAllEmployeeWithPaginationByNativeQuery(pageable);
-  }
-
-  @Override
-  public EmployeeEntity addNew(EmployeeEntity ee) {
-    return employeeRepository.save(ee);
-  }
-
 }

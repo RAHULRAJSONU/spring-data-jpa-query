@@ -1,6 +1,6 @@
 package com.silvertech.springdatajpaquery.business;
 
-import com.silvertech.springdatajpaquery.data.model.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +12,5 @@ public interface EmployeeService {
   List<EmployeeEntity> findAllSorted(Sort sort);
   Page<EmployeeEntity> findAllEmployeeWithPagination(Pageable pageable);
   Page<EmployeeEntity> findAllEmployeeWithPaginationByNativeQuery(Pageable pageable);
+  EmployeeEntity addNew(EmployeeEntity ee);
 }
