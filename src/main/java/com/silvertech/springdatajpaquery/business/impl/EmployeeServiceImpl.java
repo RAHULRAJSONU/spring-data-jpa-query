@@ -2,8 +2,14 @@ package com.silvertech.springdatajpaquery.business.impl;
 
 import com.silvertech.springdatajpaquery.business.EmployeeService;
 import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.model.Activity;
+import com.silvertech.springdatajpaquery.data.projection.EmployeeProjection;
 import com.silvertech.springdatajpaquery.persistence.EmployeeRepository;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +74,26 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public EmployeeEntity addNew(EmployeeEntity ee) {
     return employeeRepository.save(ee);
+  }
+
+  @Override
+  public List<EmployeeEntity> findEmployeesByEmails(Set<String> emails) {
+    return employeeRepository.findEmployeesByEmails(emails);
+  }
+
+  @Override
+  public boolean writeActivity() {
+    employeeRepository.findAll()
+        .forEach(employeeEntity -> {
+          employeeEntity.setActivity(
+              Arrays.asList(Activity.builder()
+                  .name("Demo Activity")
+                  .description("Adding Demo Activity for "+employeeEntity.getFirstName())
+                  .timestamp(new Timestamp(new Date().getTime()))
+                  .build()));
+          employeeRepository.save(employeeEntity);
+        });
+    return true;
   }
 
 }

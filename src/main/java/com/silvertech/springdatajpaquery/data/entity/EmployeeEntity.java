@@ -1,6 +1,10 @@
 package com.silvertech.springdatajpaquery.data.entity;
 
+import com.silvertech.springdatajpaquery.data.converter.ActivityConverter;
+import com.silvertech.springdatajpaquery.data.model.Activity;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -59,4 +63,6 @@ public class EmployeeEntity implements Serializable {
   private String ipAddress;
   @Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
   private Boolean status;
+  @Convert(converter = ActivityConverter.class)
+  private List<Activity> activity;
 }

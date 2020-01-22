@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -97,8 +98,20 @@ public class EmployeeController {
     return new ResponseEntity<>(Boolean.TRUE,HttpStatus.ACCEPTED);
   }
 
+  @PostMapping("/search-by-emails")
+  @ApiOperation(value = "Get List of All Employee", notes = "<b>Return:</b> List of employee\n<b>Technique</b>: Criteria API")
+  public ResponseEntity<List<EmployeeEntity>> searchAllByEmails(@RequestBody Set<String> emails){
+    return new ResponseEntity<>(employeeService.findEmployeesByEmails(emails), HttpStatus.ACCEPTED);
+  }
+
   @GetMapping("/search")
+  @ApiOperation(value = "Get List of All Employee", notes = "<b>Return:</b> List of employee matching with the input string\n<b>Technique</b>: Lucene Search API")
   public ResponseEntity<List<EmployeeEntity>> search(@RequestParam String searchStr){
     return new ResponseEntity<>(employeeSearchService.search(searchStr),HttpStatus.ACCEPTED);
+  }
+
+  @GetMapping("/persist-activity")
+  public boolean writeActivity(){
+    return employeeService.writeActivity();
   }
 }
