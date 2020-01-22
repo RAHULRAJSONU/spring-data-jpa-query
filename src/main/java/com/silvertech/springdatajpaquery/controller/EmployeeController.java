@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.silvertech.springdatajpaquery.business.EmployeeService;
 import com.silvertech.springdatajpaquery.business.impl.EmployeeLuceneSearchService;
 import com.silvertech.springdatajpaquery.data.entity.EmployeeEntity;
+import com.silvertech.springdatajpaquery.data.mapper.ActivityMapper;
+import com.silvertech.springdatajpaquery.data.model.Activity;
+import com.silvertech.springdatajpaquery.data.model.ActivityCreateRequest;
 import com.silvertech.springdatajpaquery.data.model.EmployeeCreateRequest;
 import com.silvertech.springdatajpaquery.util.DTO;
 import io.swagger.annotations.ApiOperation;
@@ -110,8 +113,10 @@ public class EmployeeController {
     return new ResponseEntity<>(employeeSearchService.search(searchStr),HttpStatus.ACCEPTED);
   }
 
-  @GetMapping("/persist-activity")
-  public boolean writeActivity(){
-    return employeeService.writeActivity();
+  @PostMapping("/persist-activity/{email}")
+  public ResponseEntity<EmployeeEntity> writeActivity(@PathVariable String email, @RequestBody ActivityCreateRequest activity){
+    return new ResponseEntity<>(
+        employeeService.writeActivity(email, ActivityMapper.mapCreateRequest(activity)),
+        HttpStatus.ACCEPTED);
   }
 }

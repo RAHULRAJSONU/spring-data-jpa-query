@@ -82,18 +82,11 @@ public class EmployeeServiceImpl implements EmployeeService {
   }
 
   @Override
-  public boolean writeActivity() {
-    employeeRepository.findAll()
-        .forEach(employeeEntity -> {
-          employeeEntity.setActivity(
-              Arrays.asList(Activity.builder()
-                  .name("Demo Activity")
-                  .description("Adding Demo Activity for "+employeeEntity.getFirstName())
-                  .timestamp(new Timestamp(new Date().getTime()))
-                  .build()));
-          employeeRepository.save(employeeEntity);
-        });
-    return true;
+  public EmployeeEntity writeActivity(final String email, final Activity activity) {
+    EmployeeEntity ee = employeeRepository.findByEmail(email);
+    ee.getActivity().add(activity);
+    employeeRepository.save(ee);
+    return ee;
   }
 
 }

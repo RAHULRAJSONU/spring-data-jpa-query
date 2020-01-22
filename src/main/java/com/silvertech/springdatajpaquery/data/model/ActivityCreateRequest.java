@@ -1,7 +1,5 @@
 package com.silvertech.springdatajpaquery.data.model;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,12 +29,11 @@ import lombok.NoArgsConstructor;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Builder
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class Activity {
+@AllArgsConstructor
+public class ActivityCreateRequest {
   private String name;
   private String description;
-  private Timestamp timestamp;
 }

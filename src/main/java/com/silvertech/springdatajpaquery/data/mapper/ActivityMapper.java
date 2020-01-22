@@ -1,11 +1,8 @@
-package com.silvertech.springdatajpaquery.data.model;
+package com.silvertech.springdatajpaquery.data.mapper;
 
+import com.silvertech.springdatajpaquery.data.model.Activity;
+import com.silvertech.springdatajpaquery.data.model.ActivityCreateRequest;
 import java.sql.Timestamp;
-import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /*
  * spring-data-jpa-query
@@ -31,12 +28,12 @@ import lombok.NoArgsConstructor;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@Builder
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Activity {
-  private String name;
-  private String description;
-  private Timestamp timestamp;
+public class ActivityMapper {
+  public static Activity mapCreateRequest(ActivityCreateRequest acr){
+    return Activity.builder()
+        .name(acr.getName())
+        .description(acr.getDescription())
+        .timestamp(new Timestamp(System.currentTimeMillis()))
+        .build();
+  }
 }

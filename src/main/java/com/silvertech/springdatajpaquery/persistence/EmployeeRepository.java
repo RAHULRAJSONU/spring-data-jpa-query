@@ -77,4 +77,6 @@ public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>,
       nativeQuery = true)
   int updateEmployeeStatusForNameWithNativeQuery(@Param("firstName") String firstName, @Param("status") Integer status);
 
+  EmployeeEntity findByEmail(String email);
+
 }
